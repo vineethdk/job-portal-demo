@@ -67,7 +67,10 @@ export default function PostJob() {
 
   return (
     <div className="container">
-      <h1>Post a Job</h1>
+      <div className="page-header">
+        <h1>Post a Job</h1>
+        <p className="subtitle">Fill in the details to find the perfect candidate</p>
+      </div>
       <div className="form-card" style={{ maxWidth: 600 }}>
         {message && <div className="alert alert-success">{message}</div>}
         {error && <div className="alert alert-error">{error}</div>}

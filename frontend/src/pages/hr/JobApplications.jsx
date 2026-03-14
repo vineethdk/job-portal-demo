@@ -45,7 +45,12 @@ export default function JobApplications() {
 
   return (
     <div className="container">
-      <h1>Applications for {applications[0]?.job?.title || `Job #${jobId}`}</h1>
+      <div className="page-header">
+        <h1>Applications for {applications[0]?.job?.title || `Job #${jobId}`}</h1>
+        {applications.length > 0 && (
+          <p className="record-count">{applications.length} application{applications.length !== 1 ? 's' : ''} received</p>
+        )}
+      </div>
       {applications.length === 0 ? (
         <p className="info-text">No applications received yet.</p>
       ) : (

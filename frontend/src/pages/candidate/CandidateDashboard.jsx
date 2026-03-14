@@ -20,8 +20,10 @@ export default function CandidateDashboard() {
 
   return (
     <div className="container">
-      <h1>Welcome, {user.fullName}!</h1>
-      <p className="subtitle">Here's an overview of your activity.</p>
+      <div className="page-header">
+        <h1>Welcome, {user.fullName}!</h1>
+        <p className="subtitle">Here's your activity overview</p>
+      </div>
 
       <div className="stats-row">
         <div className="stat-card">

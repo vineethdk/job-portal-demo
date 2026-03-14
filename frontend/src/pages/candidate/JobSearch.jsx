@@ -78,7 +78,10 @@ export default function JobSearch() {
 
   return (
     <div className="container">
-      <h1>Search Jobs</h1>
+      <div className="page-header">
+        <h1>Search Jobs</h1>
+        <p className="subtitle">Find your dream job</p>
+      </div>
 
       <form className="filter-bar" onSubmit={handleSearch}>
         <input name="skill" placeholder="Skill (e.g. Java)" value={filters.skill} onChange={handleChange} />

@@ -84,7 +84,10 @@ export default function Profile() {
 
   return (
     <div className="container">
-      <h1>My Profile</h1>
+      <div className="page-header">
+        <h1>My Profile</h1>
+        <p className="subtitle">Keep your profile updated to attract the best opportunities</p>
+      </div>
       <div className="form-card" style={{ maxWidth: 600 }}>
         {message && <div className="alert alert-success">{message}</div>}
         {error && <div className="alert alert-error">{error}</div>}
@@ -160,7 +163,7 @@ export default function Profile() {
         </form>
 
         {/* Resume Section */}
-        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #ddd' }}>
+        <div className="resume-section" style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #ddd' }}>
           <h3>Resume (PDF)</h3>
           {resumeMsg && <div className="alert alert-success">{resumeMsg}</div>}
           <div className="form-group">

@@ -28,7 +28,13 @@ export default function AppliedJobs() {
 
   return (
     <div className="container">
-      <h1>My Applications</h1>
+      <div className="page-header">
+        <h1>My Applications</h1>
+        <p className="subtitle">Track the status of your applications</p>
+        {applications.length > 0 && (
+          <p className="record-count">{applications.length} application{applications.length !== 1 ? 's' : ''} total</p>
+        )}
+      </div>
       {applications.length === 0 ? (
         <p className="info-text">You haven't applied to any jobs yet.</p>
       ) : (
