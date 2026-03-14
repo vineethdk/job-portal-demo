@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getJobApplications, updateApplicationStatus } from '../../api/api';
+import { getJobApplications, updateApplicationStatus, getResumeDownloadUrl } from '../../api/api';
 
 const STATUSES = ['APPLIED', 'SHORTLISTED', 'REJECTED', 'HIRED'];
 
@@ -58,6 +58,7 @@ export default function JobApplications() {
                 <th>Experience</th>
                 <th>Expected Salary</th>
                 <th>Location</th>
+                <th>Resume</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -72,6 +73,15 @@ export default function JobApplications() {
                     <td>{profile?.experienceYears ?? 'N/A'} yrs</td>
                     <td>{profile?.expectedSalary ? `$${profile.expectedSalary.toLocaleString()}` : 'N/A'}</td>
                     <td>{profile?.location || 'N/A'}</td>
+                    <td>
+                      <a
+                        href={getResumeDownloadUrl(app.candidate?.id)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View
+                      </a>
+                    </td>
                     <td><span className={statusClass(app.status)}>{app.status}</span></td>
                     <td>
                       <select

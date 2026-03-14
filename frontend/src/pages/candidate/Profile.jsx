@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { getCandidateProfile, updateCandidateProfile } from '../../api/api';
+import { getCandidateProfile, updateCandidateProfile, uploadResume, deleteResume, getResumeDownloadUrl } from '../../api/api';
 
 export default function Profile() {
   const { user } = useAuth();
@@ -14,6 +14,9 @@ export default function Profile() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resumeFile, setResumeFile] = useState(null);
+  const [hasResume, setHasResume] = useState(false);
+  const [resumeMsg, setResumeMsg] = useState('');
 
   useEffect(() => {
     getCandidateProfile(user.id)
@@ -26,6 +29,7 @@ export default function Profile() {
           location: p.location || '',
           resumeHeadline: p.resumeHeadline || '',
         });
+        setHasResume(p.hasResume || false);
       })
       .catch(() => {
         // Profile not created yet — that's fine
@@ -126,6 +130,65 @@ export default function Profile() {
             {loading ? 'Saving...' : 'Save Profile'}
           </button>
         </form>
+
+        {/* Resume Section */}
+        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #ddd' }}>
+          <h3>Resume (PDF)</h3>
+          {resumeMsg && <div className="alert alert-success">{resumeMsg}</div>}
+          <div className="form-group">
+            <input
+              type="file"
+              accept=".pdf,application/pdf"
+              onChange={(e) => setResumeFile(e.target.files[0] || null)}
+            />
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={!resumeFile}
+            onClick={async () => {
+              setResumeMsg('');
+              try {
+                await uploadResume(user.id, resumeFile);
+                setHasResume(true);
+                setResumeMsg('Resume uploaded successfully!');
+              } catch (err) {
+                setResumeMsg(err.response?.data?.message || err.response?.data || 'Failed to upload resume.');
+              }
+            }}
+          >
+            Upload Resume
+          </button>
+          {hasResume && (
+            <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <a
+                href={getResumeDownloadUrl(user.id)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
+              >
+                View Resume
+              </a>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                style={{ background: '#e74c3c', color: '#fff' }}
+                onClick={async () => {
+                  setResumeMsg('');
+                  try {
+                    await deleteResume(user.id);
+                    setHasResume(false);
+                    setResumeMsg('Resume deleted.');
+                  } catch (err) {
+                    setResumeMsg(err.response?.data?.message || err.response?.data || 'Failed to delete resume.');
+                  }
+                }}
+              >
+                Delete Resume
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

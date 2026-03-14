@@ -48,4 +48,19 @@ export const updateApplicationStatus = (applicationId, status) =>
 export const searchCandidates = (params) =>
   API.get('/hr/candidates/search', { params });
 
+// ─── Resume ──────────────────────────────────────────────
+export const uploadResume = (userId, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return API.post(`/candidate/profile/${userId}/resume`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
+
+export const deleteResume = (userId) =>
+  API.delete(`/candidate/profile/${userId}/resume`);
+
+export const getResumeDownloadUrl = (userId) =>
+  `${API.defaults.baseURL}/candidate/profile/${userId}/resume`;
+
 export default API;

@@ -13,7 +13,9 @@ import com.jobportal.repository.CandidateProfileRepository;
 import com.jobportal.repository.JobRepository;
 import com.jobportal.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -83,5 +85,36 @@ public class CandidateService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
         return applicationRepository.findByCandidateIdOrderByAppliedAtDesc(userId);
+    }
+
+    public void uploadResume(Long userId, MultipartFile file) {
+        CandidateProfile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for user: " + userId));
+        try {
+            profile.setResumeData(file.getBytes());
+            profile.setResumeFileName(file.getOriginalFilename());
+            profile.setResumeContentType(file.getContentType());
+            profileRepository.save(profile);
+        } catch (IOException e) {
+            throw new BadRequestException("Failed to upload resume");
+        }
+    }
+
+    public CandidateProfile getResumeData(Long userId) {
+        CandidateProfile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for user: " + userId));
+        if (profile.getResumeData() == null) {
+            throw new ResourceNotFoundException("No resume found for user: " + userId);
+        }
+        return profile;
+    }
+
+    public void deleteResume(Long userId) {
+        CandidateProfile profile = profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for user: " + userId));
+        profile.setResumeData(null);
+        profile.setResumeFileName(null);
+        profile.setResumeContentType(null);
+        profileRepository.save(profile);
     }
 }

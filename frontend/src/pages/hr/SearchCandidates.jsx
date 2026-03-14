@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { searchCandidates } from '../../api/api';
+import { searchCandidates, getResumeDownloadUrl } from '../../api/api';
 
 export default function SearchCandidates() {
   const [filters, setFilters] = useState({
@@ -11,6 +11,7 @@ export default function SearchCandidates() {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [expandedId, setExpandedId] = useState(null);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -55,7 +56,8 @@ export default function SearchCandidates() {
       <div className="card-grid">
         {candidates.map((c, idx) => (
           <div key={c.id || idx} className="candidate-card">
-            <h3>{c.resumeHeadline || 'Candidate'}</h3>
+            <h3>{c.user?.fullName || 'Candidate'}</h3>
+            <p className="job-meta">{c.resumeHeadline}</p>
             <p className="job-meta">{c.location}</p>
             <div className="candidate-detail">
               <strong>Skills:</strong> {c.skills || 'N/A'}
@@ -66,6 +68,36 @@ export default function SearchCandidates() {
             <div className="candidate-detail">
               <strong>Expected Salary:</strong> {c.expectedSalary ? `$${c.expectedSalary.toLocaleString()}` : 'N/A'}
             </div>
+            <button
+              className="btn btn-secondary"
+              style={{ marginTop: '0.5rem' }}
+              onClick={() => setExpandedId(expandedId === c.id ? null : c.id)}
+            >
+              {expandedId === c.id ? 'Hide Profile' : 'View Profile'}
+            </button>
+            {expandedId === c.id && (
+              <div className="candidate-profile-details" style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#f5f5f5', borderRadius: '6px' }}>
+                <div className="candidate-detail"><strong>Full Name:</strong> {c.user?.fullName || 'N/A'}</div>
+                <div className="candidate-detail"><strong>Username:</strong> {c.user?.username || 'N/A'}</div>
+                <div className="candidate-detail"><strong>Resume Headline:</strong> {c.resumeHeadline || 'N/A'}</div>
+                <div className="candidate-detail"><strong>Skills:</strong> {c.skills || 'N/A'}</div>
+                <div className="candidate-detail"><strong>Experience:</strong> {c.experienceYears ?? 'N/A'} years</div>
+                <div className="candidate-detail"><strong>Expected Salary:</strong> {c.expectedSalary ? `$${c.expectedSalary.toLocaleString()}` : 'N/A'}</div>
+                <div className="candidate-detail"><strong>Location:</strong> {c.location || 'N/A'}</div>
+                {c.hasResume && (
+                  <div className="candidate-detail" style={{ marginTop: '0.5rem' }}>
+                    <a
+                      href={getResumeDownloadUrl(c.user?.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary"
+                    >
+                      Download Resume
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </div>
