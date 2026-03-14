@@ -11,6 +11,7 @@ import com.jobportal.repository.CandidateProfileRepository;
 import com.jobportal.repository.JobRepository;
 import com.jobportal.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,27 +21,32 @@ public class DataSeeder implements CommandLineRunner {
     private final CandidateProfileRepository profileRepository;
     private final JobRepository jobRepository;
     private final ApplicationRepository applicationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public DataSeeder(UserRepository userRepository,
                       CandidateProfileRepository profileRepository,
                       JobRepository jobRepository,
-                      ApplicationRepository applicationRepository) {
+                      ApplicationRepository applicationRepository,
+                      PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.jobRepository = jobRepository;
         this.applicationRepository = applicationRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) {
+        String encoded = passwordEncoder.encode("password");
+
         // --- HR Admins ---
-        User hr1 = userRepository.save(new User("hr1", "password", Role.HR_ADMIN, "Alice Johnson", "TechCorp"));
-        User hr2 = userRepository.save(new User("hr2", "password", Role.HR_ADMIN, "Bob Williams", "DataSoft"));
+        User hr1 = userRepository.save(new User("hr1", encoded, Role.HR_ADMIN, "Alice Johnson", "TechCorp"));
+        User hr2 = userRepository.save(new User("hr2", encoded, Role.HR_ADMIN, "Bob Williams", "DataSoft"));
 
         // --- Candidates ---
-        User c1 = userRepository.save(new User("candidate1", "password", Role.CANDIDATE, "John Doe", null));
-        User c2 = userRepository.save(new User("candidate2", "password", Role.CANDIDATE, "Jane Smith", null));
-        User c3 = userRepository.save(new User("candidate3", "password", Role.CANDIDATE, "Mike Brown", null));
+        User c1 = userRepository.save(new User("candidate1", encoded, Role.CANDIDATE, "John Doe", null));
+        User c2 = userRepository.save(new User("candidate2", encoded, Role.CANDIDATE, "Jane Smith", null));
+        User c3 = userRepository.save(new User("candidate3", encoded, Role.CANDIDATE, "Mike Brown", null));
 
         // --- Candidate Profiles ---
         profileRepository.save(new CandidateProfile(c1, "Java,Spring Boot,React,SQL", 4, 90000, "New York", "Full Stack Developer with 4 years experience"));

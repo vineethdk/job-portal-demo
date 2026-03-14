@@ -6,15 +6,18 @@ import com.jobportal.entity.User;
 import com.jobportal.enums.Role;
 import com.jobportal.exception.BadRequestException;
 import com.jobportal.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User register(RegisterRequest request) {
@@ -35,7 +38,7 @@ public class AuthService {
 
         User user = new User(
                 request.getUsername(),
-                request.getPassword(),
+                passwordEncoder.encode(request.getPassword()),
                 role,
                 request.getFullName(),
                 request.getCompanyName()
@@ -48,7 +51,7 @@ public class AuthService {
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new BadRequestException("Invalid username or password"));
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadRequestException("Invalid username or password");
         }
 

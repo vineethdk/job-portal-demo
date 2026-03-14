@@ -1,6 +1,7 @@
 package com.jobportal.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jobportal.enums.Role;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
