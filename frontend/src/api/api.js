@@ -30,6 +30,9 @@ export const applyToJob = (data) =>
 export const getMyApplications = (userId) =>
   API.get(`/candidate/applications/${userId}`);
 
+export const withdrawApplication = (applicationId, userId) =>
+  API.delete(`/candidate/applications/${applicationId}`, { params: { userId } });
+
 // ─── HR: Jobs ──────────────────────────────────────────
 export const postJob = (job) =>
   API.post('/hr/jobs', job);

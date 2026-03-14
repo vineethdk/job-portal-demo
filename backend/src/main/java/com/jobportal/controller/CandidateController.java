@@ -49,6 +49,14 @@ public class CandidateController {
         return ResponseEntity.ok(candidateService.getApplicationsByUser(userId));
     }
 
+    @DeleteMapping("/applications/{applicationId}")
+    public ResponseEntity<Map<String, String>> withdrawApplication(
+            @PathVariable Long applicationId,
+            @RequestParam Long userId) {
+        candidateService.withdrawApplication(applicationId, userId);
+        return ResponseEntity.ok(Map.of("message", "Application withdrawn successfully"));
+    }
+
     @PostMapping("/profile/{userId}/resume")
     public ResponseEntity<Map<String, String>> uploadResume(
             @PathVariable Long userId,

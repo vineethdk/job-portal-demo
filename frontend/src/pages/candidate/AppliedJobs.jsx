@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { getMyApplications } from '../../api/api';
+import { getMyApplications, withdrawApplication } from '../../api/api';
 
 function statusClass(status) {
   switch (status) {
@@ -16,6 +16,7 @@ export default function AppliedJobs() {
   const { user } = useAuth();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [withdrawingId, setWithdrawingId] = useState(null);
 
   useEffect(() => {
     getMyApplications(user.id)
@@ -23,6 +24,19 @@ export default function AppliedJobs() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [user.id]);
+
+  const handleWithdraw = async (appId) => {
+    if (!window.confirm('Are you sure you want to withdraw this application?')) return;
+    setWithdrawingId(appId);
+    try {
+      await withdrawApplication(appId, user.id);
+      setApplications((prev) => prev.filter((a) => a.id !== appId));
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to withdraw application.');
+    } finally {
+      setWithdrawingId(null);
+    }
+  };
 
   if (loading) return <div className="container"><p>Loading...</p></div>;
 
@@ -47,6 +61,7 @@ export default function AppliedJobs() {
                 <th>Max Salary</th>
                 <th>Applied Date</th>
                 <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +72,20 @@ export default function AppliedJobs() {
                   <td>{app.job?.maxSalary ? `$${app.job.maxSalary.toLocaleString()}` : 'N/A'}</td>
                   <td>{app.appliedDate ? new Date(app.appliedDate).toLocaleDateString() : 'N/A'}</td>
                   <td><span className={statusClass(app.status)}>{app.status}</span></td>
+                  <td>
+                    {app.status === 'APPLIED' ? (
+                      <button
+                        className="btn btn-outline"
+                        style={{ padding: '0.3rem 0.8rem', fontSize: '0.85rem' }}
+                        disabled={withdrawingId === app.id}
+                        onClick={() => handleWithdraw(app.id)}
+                      >
+                        {withdrawingId === app.id ? 'Withdrawing...' : 'Withdraw'}
+                      </button>
+                    ) : (
+                      <span className="text-muted">—</span>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
