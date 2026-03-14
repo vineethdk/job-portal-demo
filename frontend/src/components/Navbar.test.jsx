@@ -97,10 +97,10 @@ describe('Navbar', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 
-  it('always shows the JobPortal logo link', () => {
+  it('always shows the Talent Hub logo link', () => {
     useAuth.mockReturnValue({ user: null, logout: vi.fn() });
     renderNavbar();
 
-    expect(screen.getByText('JobPortal')).toBeInTheDocument();
+    expect(screen.getByText('Talent Hub')).toBeInTheDocument();
   });
 });

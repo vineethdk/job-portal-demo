@@ -1,9 +1,19 @@
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   const handleLogout = () => {
     logout();
@@ -12,7 +22,7 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-logo">JobPortal</Link>
+      <Link to="/" className="navbar-logo">Talent Hub</Link>
 
       <div className="navbar-links">
         {!user && (
@@ -42,6 +52,13 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-right">
+        <button
+          className="theme-toggle"
+          onClick={() => setDarkMode(!darkMode)}
+          title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {darkMode ? '\u2600\uFE0F' : '\uD83C\uDF19'}
+        </button>
         {user && (
           <>
             <span className="navbar-user">Hi, {user.fullName}</span>

@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <div className="page-center">
-      <h1 className="hero-title">Welcome to JobPortal</h1>
+      <h1 className="hero-title">Welcome to Talent Hub</h1>
       <p className="hero-subtitle">
         Your one-stop destination for finding the perfect job or the perfect candidate.
       </p>

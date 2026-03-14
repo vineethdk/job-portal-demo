@@ -97,7 +97,7 @@ export default function SearchCandidates() {
               {expandedId === c.id ? 'Hide Profile' : 'View Profile'}
             </button>
             {expandedId === c.id && (
-              <div className="candidate-profile-details" style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#f5f5f5', borderRadius: '6px' }}>
+              <div className="candidate-profile-details" style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'var(--profile-details-bg)', borderRadius: '6px' }}>
                 <div className="candidate-detail"><strong>Full Name:</strong> {c.user?.fullName || 'N/A'}</div>
                 <div className="candidate-detail"><strong>Username:</strong> {c.user?.username || 'N/A'}</div>
                 <div className="candidate-detail"><strong>Resume Headline:</strong> {c.resumeHeadline || 'N/A'}</div>
