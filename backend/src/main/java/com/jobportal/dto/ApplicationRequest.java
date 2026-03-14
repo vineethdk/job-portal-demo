@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotNull;
 
 public class ApplicationRequest {
 
-    @NotNull
+    @NotNull(message = "Candidate ID is required")
     private Long candidateId;
 
-    @NotNull
+    @NotNull(message = "Job ID is required")
     private Long jobId;
 
     public Long getCandidateId() { return candidateId; }

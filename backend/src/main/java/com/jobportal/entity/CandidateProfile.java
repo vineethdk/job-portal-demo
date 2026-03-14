@@ -1,5 +1,7 @@
 package com.jobportal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class CandidateProfile {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JsonIgnoreProperties({"candidateProfile"})
     private User user;
 
     private String skills;
@@ -23,6 +26,14 @@ public class CandidateProfile {
     private String location;
 
     private String resumeHeadline;
+
+    @Lob
+    @Column(name = "resume_data")
+    @JsonIgnore
+    private byte[] resumeData;
+
+    private String resumeFileName;
+    private String resumeContentType;
 
     public CandidateProfile() {}
 
@@ -55,4 +66,17 @@ public class CandidateProfile {
 
     public String getResumeHeadline() { return resumeHeadline; }
     public void setResumeHeadline(String resumeHeadline) { this.resumeHeadline = resumeHeadline; }
+
+    public byte[] getResumeData() { return resumeData; }
+    public void setResumeData(byte[] resumeData) { this.resumeData = resumeData; }
+
+    public String getResumeFileName() { return resumeFileName; }
+    public void setResumeFileName(String resumeFileName) { this.resumeFileName = resumeFileName; }
+
+    public String getResumeContentType() { return resumeContentType; }
+    public void setResumeContentType(String resumeContentType) { this.resumeContentType = resumeContentType; }
+
+    public boolean isHasResume() {
+        return resumeData != null && resumeData.length > 0;
+    }
 }

@@ -1,5 +1,7 @@
 package com.jobportal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jobportal.enums.Role;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
@@ -28,6 +31,10 @@ public class User {
     private String fullName;
 
     private LocalDateTime createdAt;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"user"})
+    private CandidateProfile candidateProfile;
 
     @PrePersist
     protected void onCreate() {
@@ -64,4 +71,7 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public CandidateProfile getCandidateProfile() { return candidateProfile; }
+    public void setCandidateProfile(CandidateProfile candidateProfile) { this.candidateProfile = candidateProfile; }
 }

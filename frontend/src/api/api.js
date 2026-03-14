@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -47,5 +47,20 @@ export const updateApplicationStatus = (applicationId, status) =>
 // ─── HR: Candidate Search ──────────────────────────────
 export const searchCandidates = (params) =>
   API.get('/hr/candidates/search', { params });
+
+// ─── Resume ──────────────────────────────────────────────
+export const uploadResume = (userId, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return API.post(`/candidate/profile/${userId}/resume`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
+
+export const deleteResume = (userId) =>
+  API.delete(`/candidate/profile/${userId}/resume`);
+
+export const getResumeDownloadUrl = (userId) =>
+  `${API.defaults.baseURL}/candidate/profile/${userId}/resume`;
 
 export default API;

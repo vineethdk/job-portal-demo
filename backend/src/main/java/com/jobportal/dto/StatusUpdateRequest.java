@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class StatusUpdateRequest {
 
-    @NotBlank
+    @NotBlank(message = "Status is required")
     private String status;
 
     public String getStatus() { return status; }

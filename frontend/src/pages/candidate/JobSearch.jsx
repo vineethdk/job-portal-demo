@@ -15,6 +15,7 @@ export default function JobSearch() {
   const [loading, setLoading] = useState(false);
   const [applyingId, setApplyingId] = useState(null);
   const [message, setMessage] = useState('');
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     getMyApplications(user.id)
@@ -26,11 +27,25 @@ export default function JobSearch() {
   }, [user.id]);
 
   const handleChange = (e) => {
+    setErrors((prev) => ({ ...prev, [e.target.name]: '' }));
     setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+
+  const validateFilters = () => {
+    const errs = {};
+    if (filters.minExperience !== '' && (Number(filters.minExperience) < 0 || Number(filters.minExperience) > 50)) {
+      errs.minExperience = 'Min Experience must be between 0 and 50.';
+    }
+    if (filters.maxSalary !== '' && Number(filters.maxSalary) <= 0) {
+      errs.maxSalary = 'Max Salary must be positive.';
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    if (!validateFilters()) return;
     setLoading(true);
     setMessage('');
     try {
@@ -67,8 +82,14 @@ export default function JobSearch() {
 
       <form className="filter-bar" onSubmit={handleSearch}>
         <input name="skill" placeholder="Skill (e.g. Java)" value={filters.skill} onChange={handleChange} />
-        <input name="minExperience" placeholder="Min Experience" type="number" min="0" value={filters.minExperience} onChange={handleChange} />
-        <input name="maxSalary" placeholder="Max Salary" type="number" min="0" value={filters.maxSalary} onChange={handleChange} />
+        <div>
+          <input name="minExperience" placeholder="Min Experience" type="number" min="0" value={filters.minExperience} onChange={handleChange} />
+          {errors.minExperience && <span style={{ color: '#e74c3c', fontSize: '0.85rem', display: 'block', marginTop: '0.25rem' }}>{errors.minExperience}</span>}
+        </div>
+        <div>
+          <input name="maxSalary" placeholder="Max Salary" type="number" min="0" value={filters.maxSalary} onChange={handleChange} />
+          {errors.maxSalary && <span style={{ color: '#e74c3c', fontSize: '0.85rem', display: 'block', marginTop: '0.25rem' }}>{errors.maxSalary}</span>}
+        </div>
         <input name="location" placeholder="Location" value={filters.location} onChange={handleChange} />
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Searching...' : 'Search'}
