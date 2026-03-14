@@ -56,7 +56,7 @@ export const uploadResume = (userId, file) => {
   const formData = new FormData();
   formData.append('file', file);
   return API.post(`/candidate/profile/${userId}/resume`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 'Content-Type': undefined },
   });
 };
 
