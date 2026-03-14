@@ -50,6 +50,8 @@ export default function Profile() {
     if (!form.skills.trim()) errs.skills = 'Skills are required.';
     else if (form.skills.trim().length < 2) errs.skills = 'Skills must be at least 2 characters.';
     else if (form.skills.trim().length > 500) errs.skills = 'Skills must be at most 500 characters.';
+    else if (/^\d+$/.test(form.skills.trim())) errs.skills = 'Skills cannot be numeric values.';
+    else if (!/[a-zA-Z]/.test(form.skills)) errs.skills = 'Skills must contain letters.';
     if (form.experienceYears === '' || form.experienceYears === null || form.experienceYears === undefined) errs.experienceYears = 'Experience is required.';
     else if (Number(form.experienceYears) < 0 || Number(form.experienceYears) > 50) errs.experienceYears = 'Experience must be between 0 and 50 years.';
     if (form.expectedSalary === '' || form.expectedSalary === null || form.expectedSalary === undefined) errs.expectedSalary = 'Expected Salary is required.';
@@ -58,6 +60,8 @@ export default function Profile() {
     if (!form.location.trim()) errs.location = 'Location is required.';
     else if (form.location.trim().length < 2) errs.location = 'Location must be at least 2 characters.';
     else if (form.location.trim().length > 100) errs.location = 'Location must be at most 100 characters.';
+    else if (/^\d+$/.test(form.location.trim())) errs.location = 'Location cannot be numeric values.';
+    else if (!/[a-zA-Z]/.test(form.location)) errs.location = 'Location must contain letters.';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
