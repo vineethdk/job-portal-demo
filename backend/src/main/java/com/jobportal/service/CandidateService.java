@@ -52,6 +52,23 @@ public class CandidateService {
         CandidateProfile profile = profileRepository.findByUserId(userId)
                 .orElse(new CandidateProfile());
 
+        // Validate profile fields
+        if (profileData.getSkills() == null || profileData.getSkills().isBlank()) {
+            throw new BadRequestException("Skills are required");
+        }
+        if (profileData.getExperienceYears() < 0 || profileData.getExperienceYears() > 50) {
+            throw new BadRequestException("Experience must be between 0 and 50 years");
+        }
+        if (profileData.getExpectedSalary() < 0) {
+            throw new BadRequestException("Expected salary cannot be negative");
+        }
+        if (profileData.getLocation() == null || profileData.getLocation().isBlank()) {
+            throw new BadRequestException("Location is required");
+        }
+        if (profileData.getResumeHeadline() == null || profileData.getResumeHeadline().isBlank()) {
+            throw new BadRequestException("Resume headline is required");
+        }
+
         profile.setUser(user);
         profile.setSkills(profileData.getSkills());
         profile.setExperienceYears(profileData.getExperienceYears());

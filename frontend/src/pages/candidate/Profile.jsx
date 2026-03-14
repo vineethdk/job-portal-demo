@@ -13,6 +13,7 @@ export default function Profile() {
   });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [resumeFile, setResumeFile] = useState(null);
   const [hasResume, setHasResume] = useState(false);
@@ -37,13 +38,35 @@ export default function Profile() {
   }, [user.id]);
 
   const handleChange = (e) => {
+    setErrors((prev) => ({ ...prev, [e.target.name]: '' }));
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const validate = () => {
+    const errs = {};
+    if (!form.resumeHeadline.trim()) errs.resumeHeadline = 'Resume Headline is required.';
+    else if (form.resumeHeadline.trim().length < 5) errs.resumeHeadline = 'Resume Headline must be at least 5 characters.';
+    else if (form.resumeHeadline.trim().length > 200) errs.resumeHeadline = 'Resume Headline must be at most 200 characters.';
+    if (!form.skills.trim()) errs.skills = 'Skills are required.';
+    else if (form.skills.trim().length < 2) errs.skills = 'Skills must be at least 2 characters.';
+    else if (form.skills.trim().length > 500) errs.skills = 'Skills must be at most 500 characters.';
+    if (form.experienceYears === '' || form.experienceYears === null || form.experienceYears === undefined) errs.experienceYears = 'Experience is required.';
+    else if (Number(form.experienceYears) < 0 || Number(form.experienceYears) > 50) errs.experienceYears = 'Experience must be between 0 and 50 years.';
+    if (form.expectedSalary === '' || form.expectedSalary === null || form.expectedSalary === undefined) errs.expectedSalary = 'Expected Salary is required.';
+    else if (Number(form.expectedSalary) <= 0) errs.expectedSalary = 'Expected Salary must be positive.';
+    else if (Number(form.expectedSalary) > 10000000) errs.expectedSalary = 'Expected Salary must be at most 10,000,000.';
+    if (!form.location.trim()) errs.location = 'Location is required.';
+    else if (form.location.trim().length < 2) errs.location = 'Location must be at least 2 characters.';
+    else if (form.location.trim().length > 100) errs.location = 'Location must be at most 100 characters.';
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
     setError('');
+    if (!validate()) return;
     setLoading(true);
     try {
       await updateCandidateProfile(user.id, {
@@ -77,6 +100,7 @@ export default function Profile() {
               placeholder="e.g. Senior React Developer"
               required
             />
+            {errors.resumeHeadline && <span style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.25rem' }}>{errors.resumeHeadline}</span>}
           </div>
           <div className="form-group">
             <label htmlFor="skills">Skills (comma-separated)</label>
@@ -89,6 +113,7 @@ export default function Profile() {
               placeholder="e.g. Java, React, SQL"
               required
             />
+            {errors.skills && <span style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.25rem' }}>{errors.skills}</span>}
           </div>
           <div className="form-group">
             <label htmlFor="experienceYears">Experience (years)</label>
@@ -101,6 +126,7 @@ export default function Profile() {
               onChange={handleChange}
               required
             />
+            {errors.experienceYears && <span style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.25rem' }}>{errors.experienceYears}</span>}
           </div>
           <div className="form-group">
             <label htmlFor="expectedSalary">Expected Salary</label>
@@ -113,6 +139,7 @@ export default function Profile() {
               onChange={handleChange}
               required
             />
+            {errors.expectedSalary && <span style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.25rem' }}>{errors.expectedSalary}</span>}
           </div>
           <div className="form-group">
             <label htmlFor="location">Location</label>
@@ -125,6 +152,7 @@ export default function Profile() {
               placeholder="e.g. New York"
               required
             />
+            {errors.location && <span style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.25rem' }}>{errors.location}</span>}
           </div>
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
             {loading ? 'Saving...' : 'Save Profile'}

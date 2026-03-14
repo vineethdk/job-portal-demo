@@ -9,15 +9,28 @@ export default function Login() {
 
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
+    setErrors((prev) => ({ ...prev, [e.target.name]: '' }));
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const validate = () => {
+    const errs = {};
+    if (!form.username.trim()) errs.username = 'Username is required.';
+    else if (form.username.trim().length < 3) errs.username = 'Username must be at least 3 characters.';
+    if (!form.password) errs.password = 'Password is required.';
+    else if (form.password.length < 6) errs.password = 'Password must be at least 6 characters.';
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (!validate()) return;
     setLoading(true);
     try {
       const user = await loginUser(form);
@@ -49,6 +62,7 @@ export default function Login() {
               onChange={handleChange}
               required
             />
+            {errors.username && <span style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.25rem' }}>{errors.username}</span>}
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
@@ -60,6 +74,7 @@ export default function Login() {
               onChange={handleChange}
               required
             />
+            {errors.password && <span style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.25rem' }}>{errors.password}</span>}
           </div>
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}

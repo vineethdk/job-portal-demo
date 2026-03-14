@@ -1,6 +1,7 @@
 package com.jobportal.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class CandidateProfile {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JsonIgnoreProperties({"candidateProfile"})
     private User user;
 
     private String skills;
