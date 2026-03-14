@@ -49,6 +49,7 @@ export default function Login() {
   return (
     <div className="page-center">
       <div className="form-card">
+        <p className="form-welcome-text">Welcome back to Talent Hub</p>
         <h2>Login</h2>
         {error && <div className="alert alert-error">{error}</div>}
         <form onSubmit={handleSubmit}>

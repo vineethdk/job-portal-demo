@@ -45,7 +45,12 @@ export default function JobApplications() {
 
   return (
     <div className="container">
-      <h1>Applications for {applications[0]?.job?.title || `Job #${jobId}`}</h1>
+      <div className="page-header">
+        <h1>Applications for {applications[0]?.job?.title || `Job #${jobId}`}</h1>
+        {applications.length > 0 && (
+          <p className="record-count">{applications.length} application{applications.length !== 1 ? 's' : ''} received</p>
+        )}
+      </div>
       {applications.length === 0 ? (
         <p className="info-text">No applications received yet.</p>
       ) : (
@@ -74,13 +79,17 @@ export default function JobApplications() {
                     <td>{profile?.expectedSalary ? `$${profile.expectedSalary.toLocaleString()}` : 'N/A'}</td>
                     <td>{profile?.location || 'N/A'}</td>
                     <td>
-                      <a
-                        href={getResumeDownloadUrl(app.candidate?.id)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View
-                      </a>
+                      {profile?.hasResume ? (
+                        <a
+                          href={getResumeDownloadUrl(app.candidate?.id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View
+                        </a>
+                      ) : (
+                        <span className="text-muted">N/A</span>
+                      )}
                     </td>
                     <td><span className={statusClass(app.status)}>{app.status}</span></td>
                     <td>

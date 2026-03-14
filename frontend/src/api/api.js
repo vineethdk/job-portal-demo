@@ -30,6 +30,9 @@ export const applyToJob = (data) =>
 export const getMyApplications = (userId) =>
   API.get(`/candidate/applications/${userId}`);
 
+export const withdrawApplication = (applicationId, userId) =>
+  API.delete(`/candidate/applications/${applicationId}`, { params: { userId } });
+
 // ─── HR: Jobs ──────────────────────────────────────────
 export const postJob = (job) =>
   API.post('/hr/jobs', job);
@@ -53,7 +56,7 @@ export const uploadResume = (userId, file) => {
   const formData = new FormData();
   formData.append('file', file);
   return API.post(`/candidate/profile/${userId}/resume`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 'Content-Type': undefined },
   });
 };
 

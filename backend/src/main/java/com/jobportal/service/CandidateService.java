@@ -104,6 +104,21 @@ public class CandidateService {
         return applicationRepository.findByCandidateIdOrderByAppliedAtDesc(userId);
     }
 
+    public void withdrawApplication(Long applicationId, Long userId) {
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found with id: " + applicationId));
+
+        if (!application.getCandidate().getId().equals(userId)) {
+            throw new BadRequestException("You can only withdraw your own applications");
+        }
+
+        if (application.getStatus() != com.jobportal.enums.ApplicationStatus.APPLIED) {
+            throw new BadRequestException("Can only withdraw applications with APPLIED status");
+        }
+
+        applicationRepository.delete(application);
+    }
+
     public void uploadResume(Long userId, MultipartFile file) {
         CandidateProfile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile not found for user: " + userId));

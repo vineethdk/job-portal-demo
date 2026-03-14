@@ -29,8 +29,10 @@ export default function HrDashboard() {
 
   return (
     <div className="container">
-      <h1>Welcome, {user.fullName}!</h1>
-      <p className="subtitle">HR Admin Dashboard</p>
+      <div className="page-header">
+        <h1>Welcome, {user.fullName}!</h1>
+        <p className="subtitle">Here's your recruitment overview</p>
+      </div>
 
       <div className="stats-row">
         <div className="stat-card">

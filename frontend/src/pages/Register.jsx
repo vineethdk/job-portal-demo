@@ -70,6 +70,7 @@ export default function Register() {
   return (
     <div className="page-center">
       <div className="form-card">
+        <p className="form-welcome-text">Join Talent Hub today</p>
         <h2>Register</h2>
         {error && <div className="alert alert-error">{error}</div>}
         <form onSubmit={handleSubmit}>

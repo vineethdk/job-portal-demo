@@ -32,7 +32,7 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"user"})
     private CandidateProfile candidateProfile;
 

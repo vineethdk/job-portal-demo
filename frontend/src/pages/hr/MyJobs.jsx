@@ -19,7 +19,13 @@ export default function MyJobs() {
 
   return (
     <div className="container">
-      <h1>My Posted Jobs</h1>
+      <div className="page-header">
+        <h1>My Posted Jobs</h1>
+        <p className="subtitle">Manage your posted positions</p>
+        {jobs.length > 0 && (
+          <p className="record-count">{jobs.length} job{jobs.length !== 1 ? 's' : ''} posted</p>
+        )}
+      </div>
       {jobs.length === 0 ? (
         <p className="info-text">You haven't posted any jobs yet.</p>
       ) : (

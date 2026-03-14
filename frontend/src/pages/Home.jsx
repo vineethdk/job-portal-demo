@@ -22,7 +22,8 @@ export default function Home() {
 
   return (
     <div className="page-center">
-      <h1 className="hero-title">Welcome to JobPortal</h1>
+      <h1 className="hero-title">Welcome to Talent Hub</h1>
+      <p className="hero-tagline">Connecting talent with opportunity</p>
       <p className="hero-subtitle">
         Your one-stop destination for finding the perfect job or the perfect candidate.
       </p>
@@ -32,6 +33,7 @@ export default function Home() {
           <div className="home-card-icon">&#128188;</div>
           <h2>I'm a Candidate</h2>
           <p>Search for jobs, build your profile, and apply to exciting opportunities.</p>
+          <p className="home-card-hint">Browse thousands of openings tailored to your skills</p>
           <div className="home-card-actions">
             <Link to="/login" state={{ defaultRole: 'CANDIDATE' }} className="btn btn-primary">Login</Link>
             <Link to="/register" state={{ defaultRole: 'CANDIDATE' }} className="btn btn-outline">Register</Link>
@@ -42,6 +44,7 @@ export default function Home() {
           <div className="home-card-icon">&#128200;</div>
           <h2>I'm an HR Admin</h2>
           <p>Post jobs, review applications, and find top talent for your company.</p>
+          <p className="home-card-hint">Streamline your hiring process from start to finish</p>
           <div className="home-card-actions">
             <Link to="/login" state={{ defaultRole: 'HR_ADMIN' }} className="btn btn-primary">Login</Link>
             <Link to="/register" state={{ defaultRole: 'HR_ADMIN' }} className="btn btn-outline">Register</Link>

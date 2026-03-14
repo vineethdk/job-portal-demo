@@ -31,6 +31,8 @@ export default function PostJob() {
     if (!form.requiredSkills.trim()) errs.requiredSkills = 'Required Skills are required.';
     else if (form.requiredSkills.trim().length < 2) errs.requiredSkills = 'Required Skills must be at least 2 characters.';
     else if (form.requiredSkills.trim().length > 500) errs.requiredSkills = 'Required Skills must be at most 500 characters.';
+    else if (/^\d+$/.test(form.requiredSkills.trim())) errs.requiredSkills = 'Skills cannot be numeric values.';
+    else if (!/[a-zA-Z]/.test(form.requiredSkills)) errs.requiredSkills = 'Skills must contain letters.';
     if (form.minExperience === '' || form.minExperience === null || form.minExperience === undefined) errs.minExperience = 'Minimum Experience is required.';
     else if (Number(form.minExperience) < 0 || Number(form.minExperience) > 50) errs.minExperience = 'Minimum Experience must be between 0 and 50 years.';
     if (form.maxSalary === '' || form.maxSalary === null || form.maxSalary === undefined) errs.maxSalary = 'Maximum Salary is required.';
@@ -39,6 +41,8 @@ export default function PostJob() {
     if (!form.location.trim()) errs.location = 'Location is required.';
     else if (form.location.trim().length < 2) errs.location = 'Location must be at least 2 characters.';
     else if (form.location.trim().length > 100) errs.location = 'Location must be at most 100 characters.';
+    else if (/^\d+$/.test(form.location.trim())) errs.location = 'Location cannot be numeric values.';
+    else if (!/[a-zA-Z]/.test(form.location)) errs.location = 'Location must contain letters.';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -67,7 +71,10 @@ export default function PostJob() {
 
   return (
     <div className="container">
-      <h1>Post a Job</h1>
+      <div className="page-header">
+        <h1>Post a Job</h1>
+        <p className="subtitle">Fill in the details to find the perfect candidate</p>
+      </div>
       <div className="form-card" style={{ maxWidth: 600 }}>
         {message && <div className="alert alert-success">{message}</div>}
         {error && <div className="alert alert-error">{error}</div>}

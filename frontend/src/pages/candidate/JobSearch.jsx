@@ -18,6 +18,9 @@ export default function JobSearch() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    searchJobs({})
+      .then((res) => setJobs(res.data))
+      .catch(() => {});
     getMyApplications(user.id)
       .then((res) => {
         const ids = new Set(res.data.map((a) => a.job?.id || a.jobId));
@@ -78,7 +81,10 @@ export default function JobSearch() {
 
   return (
     <div className="container">
-      <h1>Search Jobs</h1>
+      <div className="page-header">
+        <h1>Search Jobs</h1>
+        <p className="subtitle">Find your dream job</p>
+      </div>
 
       <form className="filter-bar" onSubmit={handleSearch}>
         <input name="skill" placeholder="Skill (e.g. Java)" value={filters.skill} onChange={handleChange} />
