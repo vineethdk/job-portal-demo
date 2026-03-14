@@ -79,13 +79,17 @@ export default function JobApplications() {
                     <td>{profile?.expectedSalary ? `$${profile.expectedSalary.toLocaleString()}` : 'N/A'}</td>
                     <td>{profile?.location || 'N/A'}</td>
                     <td>
-                      <a
-                        href={getResumeDownloadUrl(app.candidate?.id)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View
-                      </a>
+                      {profile?.hasResume ? (
+                        <a
+                          href={getResumeDownloadUrl(app.candidate?.id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View
+                        </a>
+                      ) : (
+                        <span className="text-muted">N/A</span>
+                      )}
                     </td>
                     <td><span className={statusClass(app.status)}>{app.status}</span></td>
                     <td>
