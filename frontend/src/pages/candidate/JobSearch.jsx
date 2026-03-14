@@ -18,6 +18,9 @@ export default function JobSearch() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    searchJobs({})
+      .then((res) => setJobs(res.data))
+      .catch(() => {});
     getMyApplications(user.id)
       .then((res) => {
         const ids = new Set(res.data.map((a) => a.job?.id || a.jobId));
